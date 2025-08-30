@@ -15,6 +15,7 @@ import {
   MultiFactorResolver,
   PhoneAuthProvider,
   PhoneMultiFactorGenerator,
+  getMultiFactorResolver,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useToast } from './use-toast';
@@ -62,10 +63,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const login = async (email: string, password: string) => {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    if (!userCredential.user.emailVerified) {
-        await signOut(auth);
-        throw { code: 'auth/email-not-verified' };
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if (!userCredential.user.emailVerified) {
+          await signOut(auth);
+          throw { code: 'auth/email-not-verified' };
+      }
+    } catch (error: any) {
+       if (error.code === 'auth/multi-factor-required') {
+         // Let the login page handle this error.
+         throw error;
+       }
+       if (error.code === 'auth/email-not-verified') {
+         throw error;
+       }
+       toast({
+         title: 'Error logging in',
+         description: error.message,
+         variant: 'destructive',
+       });
     }
   };
   

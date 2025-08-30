@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
+import { PhoneAuthProvider, PhoneMultiFactorGenerator } from "firebase/auth";
 
 const formSchema = z.object({
   code: z.string().length(6, { message: "Verification code must be 6 digits." }),
@@ -23,7 +24,7 @@ type MfaFormValues = z.infer<typeof formSchema>;
 export default function MfaPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { completeMfaSignIn } = useAuth();
+  const { mfaResolver, completeMfaSignIn } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const phoneHint = searchParams.get('phoneHint');
@@ -39,7 +40,19 @@ export default function MfaPage() {
   const onSubmit: SubmitHandler<MfaFormValues> = async (data) => {
     setIsLoading(true);
     try {
-      await completeMfaSignIn(data.code);
+       if (!mfaResolver) {
+        throw new Error("MFA resolver not found. Please try logging in again.");
+      }
+      
+      const verificationId = (mfaResolver.hints[0] as any).verificationId;
+      if (!verificationId) {
+        throw new Error("Verification ID not found. Please try logging in again.");
+      }
+
+      const cred = PhoneAuthProvider.credential(verificationId, data.code);
+      const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+      await mfaResolver.resolveSignIn(multiFactorAssertion);
+      
       toast({
         title: "Success",
         description: "You have successfully logged in.",

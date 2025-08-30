@@ -55,45 +55,46 @@ export default function SignupPage() {
       const user = await signup(data.email, data.password, data.name);
       
       if (user) {
-        if (!(window as any).recaptchaVerifier) {
-          (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-              'size': 'invisible',
-          });
-        }
-        const recaptchaVerifier = (window as any).recaptchaVerifier;
-        
-        const session = await multiFactor(user).getSession();
-        const phoneInfoOptions = {
-            phoneNumber: data.phone,
-            session: session
-        };
+         if (auth.currentUser) {
+            await auth.currentUser.reload();
+            if (auth.currentUser.emailVerified) {
+                if (!(window as any).recaptchaVerifier) {
+                    (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                        'size': 'invisible',
+                    });
+                }
+                const recaptchaVerifier = (window as any).recaptchaVerifier;
+                
+                const session = await multiFactor(user).getSession();
+                const phoneInfoOptions = {
+                    phoneNumber: data.phone,
+                    session: session
+                };
 
-        const phoneAuthProvider = new PhoneAuthProvider(auth);
-        const newVerificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
-        setVerificationId(newVerificationId);
-        setIsEnrollingMfa(true);
-        toast({
-            title: "Verification Code Sent",
-            description: "A code has been sent to your phone. Please enter it to enable MFA.",
-        });
+                const phoneAuthProvider = new PhoneAuthProvider(auth);
+                const newVerificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+                setVerificationId(newVerificationId);
+                setIsEnrollingMfa(true);
+                toast({
+                    title: "Verification Code Sent",
+                    description: "A code has been sent to your phone. Please enter it to enable MFA.",
+                });
+            } else {
+                 toast({
+                    title: "Please Verify Email",
+                    description: "A verification email has been sent. Please verify your email before enabling MFA.",
+                 });
+                 router.push('/login');
+            }
+        }
       }
 
     } catch (error: any) {
-        if (error.code === 'auth/unverified-email') {
-            // This case should be handled by the login logic now.
-            // But as a fallback, we can inform the user.
-             toast({
-              title: "Email not verified",
-              description: "Please verify your email before enabling MFA.",
-              variant: "destructive",
-            });
-        } else {
-            toast({
-                title: "Error",
-                description: error.message,
-                variant: "destructive",
-            });
-        }
+        toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+        });
     } finally {
         setIsLoading(false);
     }
@@ -273,4 +274,3 @@ export default function SignupPage() {
     </div>
   );
 }
-

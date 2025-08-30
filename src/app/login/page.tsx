@@ -58,19 +58,30 @@ export default function LoginPage() {
       router.push("/");
     } catch (error: any) {
         if (error.code === 'auth/multi-factor-required') {
-            const resolver = getMultiFactorResolver(error.auth, error);
+            const resolver = getMultiFactorResolver(auth, error);
             setMfaResolver(resolver);
             const phoneHint = resolver.hints[0].phoneNumber;
             
-            const phoneAuthProvider = new PhoneAuthProvider(error.auth);
+            const phoneAuthProvider = new PhoneAuthProvider(auth);
             const recaptchaVerifier = (window as any).recaptchaVerifier;
 
-            await phoneAuthProvider.verifyPhoneNumber({
-                multiFactorHint: resolver.hints[0],
-                session: resolver.session
-            }, recaptchaVerifier);
-            
-            router.push(`/login/mfa?phoneHint=${phoneHint}`);
+            try {
+              const verificationId = await phoneAuthProvider.verifyPhoneNumber({
+                  multiFactorHint: resolver.hints[0],
+                  session: resolver.session
+              }, recaptchaVerifier);
+              
+              // By setting the verificationId on the resolver hint, we can access it on the MFA page.
+              (resolver.hints[0] as any).verificationId = verificationId;
+
+              router.push(`/login/mfa?phoneHint=${phoneHint}`);
+            } catch (verificationError: any) {
+               toast({
+                title: "Error sending verification code",
+                description: verificationError.message,
+                variant: "destructive",
+              });
+            }
         } else if (error.code === 'auth/email-not-verified') {
              toast({
               title: "Email not verified",
