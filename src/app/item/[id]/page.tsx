@@ -28,7 +28,8 @@ type SelectedOptions = {
 export default function ItemPage({ params }: ItemPageProps) {
   const { id } = use(params);
   const item = menuData.find((i) => i.id === id);
-  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(() => {
+
+  const initialSelectedOptions = useMemo(() => {
     const initialOptions: SelectedOptions = {};
     if (item?.customizationOptions) {
       item.customizationOptions.forEach(option => {
@@ -38,7 +39,9 @@ export default function ItemPage({ params }: ItemPageProps) {
       });
     }
     return initialOptions;
-  });
+  }, [item]);
+
+  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(initialSelectedOptions);
   
   if (!item) {
     notFound();
