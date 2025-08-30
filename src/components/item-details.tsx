@@ -65,11 +65,11 @@ export function ItemDetails({ item }: ItemDetailsProps) {
             if (selected) {
                 if (option.type === 'single' && typeof selected === 'string') {
                     const choice = option.choices.find(c => c.name === selected);
-                    if (choice) price += choice.priceModifier;
+                    if (choice && choice.priceModifier) price += choice.priceModifier;
                 } else if (option.type === 'multiple' && Array.isArray(selected)) {
                     for (const choiceName of selected) {
                         const choice = option.choices.find(c => c.name === choiceName);
-                        if (choice) price += choice.priceModifier;
+                        if (choice && choice.priceModifier) price += choice.priceModifier;
                     }
                 }
             }
@@ -112,9 +112,9 @@ export function ItemDetails({ item }: ItemDetailsProps) {
           <h1 className="text-2xl md:text-3xl font-bold font-headline mb-2">{item.name}</h1>
           <p className="text-muted-foreground text-base mb-4">{item.description}</p>
           
-          <div className="space-y-4 mb-4 flex-grow min-h-0">
+          <div className="space-y-4 mb-4 flex-grow min-h-0 flex flex-col">
               {item.customizationOptions && item.customizationOptions.map((option) => (
-                <div key={option.id}>
+                <div key={option.id} className={cn(option.type === 'multiple' && 'flex-grow min-h-0 flex flex-col')}>
                    {option.id !== 'size' && option.id !== 'crust' && <h3 className="text-md font-semibold mb-2">{option.name}</h3>}
                   {option.type === 'single' ? (
                     <div className="flex gap-2">
@@ -131,7 +131,7 @@ export function ItemDetails({ item }: ItemDetailsProps) {
                       ))}
                     </div>
                   ) : (
-                    <ScrollArea className="h-48 p-1">
+                    <ScrollArea className="p-1 flex-grow">
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-1">
                         {option.choices.map((choice: CustomizationOptionChoice) => {
                           const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
@@ -154,9 +154,11 @@ export function ItemDetails({ item }: ItemDetailsProps) {
                                   <Label htmlFor={`${option.id}-${choice.name}`} className="text-xs font-medium leading-tight cursor-pointer">
                                     {choice.name}
                                   </Label>
-                                  <p className="text-xs text-muted-foreground mt-1">
-                                    +${choice.priceModifier.toFixed(2)}
-                                  </p>
+                                  {choice.priceModifier > 0 && (
+                                      <p className="text-xs text-muted-foreground mt-1">
+                                      +${choice.priceModifier.toFixed(2)}
+                                      </p>
+                                  )}
                                 </div>
                                 <Checkbox 
                                   id={`${option.id}-${choice.name}`} 
