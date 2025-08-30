@@ -1,8 +1,10 @@
 
 
+
 export type CustomizationOptionChoice = {
   name: string;
   priceModifier: number;
+  imageUrl?: string;
 };
 
 export type CustomizationOption = {

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -9,7 +10,9 @@ import { AddToCartButton } from '@/components/add-to-cart-button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CustomizationOptionChoice } from '@/lib/types';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
 
 interface ItemPageProps {
   params: {
@@ -124,19 +127,40 @@ export default function ItemPage({ params }: ItemPageProps) {
                       ))}
                     </RadioGroup>
                   ) : (
-                    <div className="space-y-2">
-                      {option.choices.map((choice) => (
-                        <div key={choice.name} className="flex items-center space-x-2">
-                          <Checkbox 
-                            id={`${option.id}-${choice.name}`} 
-                            onCheckedChange={(checked) => handleMultipleChange(option.id, choice.name, !!checked)}
-                          />
-                          <Label htmlFor={`${option.id}-${choice.name}`} className="flex-grow">
-                             {choice.name} 
-                            {choice.priceModifier > 0 && ` (+$${choice.priceModifier.toFixed(2)})`}
-                          </Label>
-                        </div>
-                      ))}
+                    <div className="grid grid-cols-3 gap-4">
+                      {option.choices.map((choice) => {
+                        const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
+                        return (
+                          <Card 
+                            key={choice.name} 
+                            className={cn(
+                                "cursor-pointer transition-all",
+                                isSelected ? "ring-2 ring-primary" : "ring-0"
+                            )}
+                            onClick={() => handleMultipleChange(option.id, choice.name, !isSelected)}
+                          >
+                            <CardContent className="p-2 text-center">
+                              {choice.imageUrl && (
+                                <div className="relative w-full aspect-square mb-2">
+                                  <Image src={choice.imageUrl} alt={choice.name} fill className="object-contain" sizes="10vw"/>
+                                </div>
+                              )}
+                              <Label htmlFor={`${option.id}-${choice.name}`} className="text-sm font-medium">
+                                {choice.name}
+                              </Label>
+                              <p className="text-xs text-muted-foreground">
+                                +${choice.priceModifier.toFixed(2)}
+                              </p>
+                              <Checkbox 
+                                id={`${option.id}-${choice.name}`} 
+                                checked={isSelected}
+                                onCheckedChange={(checked) => handleMultipleChange(option.id, choice.name, !!checked)}
+                                className="sr-only"
+                              />
+                            </CardContent>
+                          </Card>
+                        )
+                      })}
                     </div>
                   )}
                 </div>

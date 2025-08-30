@@ -1,73 +1,95 @@
+
 import type { MenuItemType } from './types';
 
 const extraPizzaToppings = [
   {
     name: 'Сливочная моцарелла',
     price: 79,
+    imageUrl:
+      'https://cdn.dodostatic.net/static/Img/Ingredients/cdea869ef287426386ed634e6099a5ba.png',
   },
   {
     name: 'Сыры чеддер и пармезан',
     price: 79,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA69C1FE796.png',
   },
   {
     name: 'Острый перец халапеньо',
     price: 59,
+    imageUrl:
+      'https://cdn.dodostatic.net/static/Img/Ingredients/11ee95b6bfdf98fb88a113db92d7b3df.png',
   },
   {
     name: 'Нежный цыпленок',
     price: 79,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA5B328D35A.png',
   },
   {
     name: 'Шампиньоны',
     price: 59,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA67259A324.png',
   },
   {
     name: 'Ветчина',
     price: 79,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA61B9A8D61.png',
   },
   {
     name: 'Пикантная пепперони',
     price: 79,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA6258199C3.png',
   },
   {
     name: 'Острая чоризо',
     price: 79,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA62D5D6027.png',
   },
   {
     name: 'Маринованные огурчики',
     price: 59,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A21DA51A81211E9EA89958D782B.png',
   },
   {
     name: 'Свежие томаты',
     price: 59,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA7AC1A1D67.png',
   },
   {
     name: 'Красный лук',
     price: 59,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA60AE6464C.png',
   },
   {
     name: 'Сочные ананасы',
     price: 59,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A21DA51A81211E9AFA6795BA2A0.png',
   },
   {
     name: 'Итальянские травы',
     price: 39,
+    imageUrl:
+      'https://cdn.dodostatic.net/static/Img/Ingredients/370dac9ed21e4bffaf9bc2618d258734.png',
   },
   {
     name: 'Сладкий перец',
     price: 59,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA63F774C1B.png',
   },
   {
     name: 'Кубики брынзы',
     price: 79,
+    imageUrl: 'https://cdn.dodostatic.net/static/Img/Ingredients/000D3A39D824A82E11E9AFA6B0FFC349.png',
   },
   {
     name: 'Митболы',
     price: 79,
+    imageUrl:
+      'https://cdn.dodostatic.net/static/Img/Ingredients/b2f3a5d5afe44516a93cfc0d2ee60088.png',
   },
 ].map(topping => ({
   name: topping.name,
-  priceModifier: topping.price
+  priceModifier: topping.price,
+  imageUrl: topping.imageUrl,
 }));
 
 
@@ -168,7 +190,6 @@ export const menuData: MenuItemType[] = [
             choices: [
                 { name: 'традиционная', priceModifier: 0 },
                 { name: 'тонкая', priceModifier: 0 },
-                { name: 'Сырный бортик', priceModifier: 179 },
             ],
         },
         {
@@ -205,7 +226,6 @@ export const menuData: MenuItemType[] = [
         choices: [
             { name: 'традиционная', priceModifier: 0 },
             { name: 'тонкая', priceModifier: 0 },
-            { name: 'Сырный бортик', priceModifier: 179 },
         ],
     },
      {
@@ -242,7 +262,6 @@ export const menuData: MenuItemType[] = [
         choices: [
             { name: 'традиционная', priceModifier: 0 },
             { name: 'тонкая', priceModifier: 0 },
-            { name: 'Сырный бортик', priceModifier: 179 },
         ],
     },
      {
