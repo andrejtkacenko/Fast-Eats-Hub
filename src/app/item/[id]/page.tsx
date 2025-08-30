@@ -129,13 +129,13 @@ export default function ItemPage({ params }: ItemPageProps) {
                 <div key={option.id}>
                   {option.id !== 'size' && option.id !== 'crust' && <h3 className="text-md font-semibold mb-2">{option.name}</h3>}
                   {option.type === 'single' ? (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex gap-2">
                       {option.choices.map((choice) => (
                         <Button
                             key={choice.name}
                             variant={selectedOptions[option.id] === choice.name ? 'default' : 'outline'}
                             onClick={() => handleSingleChange(option.id, choice.name)}
-                            className="flex-grow sm:flex-grow-0"
+                            className="flex-grow"
                         >
                             {choice.name} 
                             {choice.priceModifier > 0 && ` (+$${choice.priceModifier.toFixed(2)})`}
