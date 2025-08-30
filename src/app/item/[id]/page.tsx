@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -142,7 +141,7 @@ export default function ItemPage({ params }: ItemPageProps) {
                     </div>
                   ) : (
                     <ScrollArea className="h-48 p-1">
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pr-3">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pr-4">
                         {option.choices.map((choice: CustomizationOptionChoice) => {
                           const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
                           return (
