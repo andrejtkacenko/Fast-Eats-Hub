@@ -1,3 +1,4 @@
+
 import { MenuDisplay } from "@/components/menu-display";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -29,9 +30,11 @@ export default function Home() {
         </div>
       </section>
       
-      <div id="menu" className="container mx-auto px-4 py-16">
-        <MenuDisplay />
-      </div>
+      <section id="menu" className="py-16">
+        <div className="container mx-auto px-4">
+          <MenuDisplay />
+        </div>
+      </section>
     </>
   );
 }
