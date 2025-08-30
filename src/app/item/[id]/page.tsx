@@ -2,17 +2,19 @@
 
 'use client';
 
-import { useState, useMemo, use } from 'react';
+import { useState, useMemo } from 'react';
+import { use } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { menuData } from '@/lib/menu-data';
 import { AddToCartButton } from '@/components/add-to-cart-button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import type { CustomizationOptionChoice } from '@/lib/types';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Label } from '@/components/ui/label';
 
 
 interface ItemPageProps {
@@ -35,6 +37,8 @@ export default function ItemPage({ params }: ItemPageProps) {
       item.customizationOptions.forEach(option => {
         if (option.type === 'single' && option.choices.length > 0) {
           initialOptions[option.id] = option.choices[0].name;
+        } else if (option.type === 'multiple') {
+            initialOptions[option.id] = [];
         }
       });
     }
@@ -104,9 +108,9 @@ export default function ItemPage({ params }: ItemPageProps) {
   const aiHint = item['data-ai-hint'] || 'food item';
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
-        <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-lg">
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid md:grid-cols-2 gap-8 items-start">
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-lg max-h-[50vh]">
           <Image
             src={item.image}
             alt={item.name}
@@ -116,15 +120,14 @@ export default function ItemPage({ params }: ItemPageProps) {
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
-        <div className="flex flex-col justify-center h-full">
-          <h1 className="text-3xl md:text-4xl font-bold font-headline mb-4">{item.name}</h1>
-          <p className="text-muted-foreground text-lg mb-6">{item.description}</p>
+        <div className="flex flex-col h-full max-h-[80vh]">
+          <h1 className="text-2xl md:text-3xl font-bold font-headline mb-2">{item.name}</h1>
+          <p className="text-muted-foreground text-base mb-4">{item.description}</p>
           
-          {item.customizationOptions && item.customizationOptions.length > 0 && (
-            <div className="space-y-6 mb-8">
-              {item.customizationOptions.map((option) => (
+          <div className="space-y-4 mb-4 flex-grow min-h-0">
+              {item.customizationOptions && item.customizationOptions.map((option) => (
                 <div key={option.id}>
-                  {option.id !== 'size' && option.id !== 'crust' && <h3 className="text-lg font-semibold mb-3">{option.name}</h3>}
+                  {option.id !== 'size' && option.id !== 'crust' && <h3 className="text-md font-semibold mb-2">{option.name}</h3>}
                   {option.type === 'single' ? (
                     <div className="flex flex-wrap gap-2">
                       {option.choices.map((choice) => (
@@ -140,9 +143,9 @@ export default function ItemPage({ params }: ItemPageProps) {
                       ))}
                     </div>
                   ) : (
-                    <div>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        {option.choices.map((choice) => {
+                    <ScrollArea className="h-48">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pr-4">
+                        {option.choices.map((choice: CustomizationOptionChoice) => {
                           const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
                           return (
                             <Card 
@@ -160,7 +163,7 @@ export default function ItemPage({ params }: ItemPageProps) {
                                   </div>
                                 )}
                                 <div className="flex-grow flex flex-col justify-center">
-                                  <Label htmlFor={`${option.id}-${choice.name}`} className="text-sm font-medium leading-tight">
+                                  <Label htmlFor={`${option.id}-${choice.name}`} className="text-xs font-medium leading-tight cursor-pointer">
                                     {choice.name}
                                   </Label>
                                   <p className="text-xs text-muted-foreground mt-1">
@@ -178,15 +181,14 @@ export default function ItemPage({ params }: ItemPageProps) {
                           )
                         })}
                       </div>
-                    </div>
+                    </ScrollArea>
                   )}
                 </div>
               ))}
-            </div>
-          )}
+          </div>
 
-          <div className="flex items-center justify-between mt-auto mb-8">
-            <p className="text-3xl font-bold text-primary">${currentPrice.toFixed(2)}</p>
+          <div className="flex items-center justify-between mt-auto mb-4">
+            <p className="text-2xl font-bold text-primary">${currentPrice.toFixed(2)}</p>
           </div>
           <AddToCartButton item={cartItem} />
         </div>
