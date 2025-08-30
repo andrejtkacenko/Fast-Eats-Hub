@@ -3,7 +3,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { use } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { menuData } from '@/lib/menu-data';
@@ -28,8 +27,7 @@ type SelectedOptions = {
 };
 
 export default function ItemPage({ params }: ItemPageProps) {
-  const { id } = use(params);
-  const item = menuData.find((i) => i.id === id);
+  const item = menuData.find((i) => i.id === params.id);
 
   const initialSelectedOptions = useMemo(() => {
     const initialOptions: SelectedOptions = {};
@@ -143,8 +141,8 @@ export default function ItemPage({ params }: ItemPageProps) {
                       ))}
                     </div>
                   ) : (
-                    <ScrollArea className="h-48">
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pr-4">
+                    <ScrollArea className="h-48 p-1">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pr-3">
                         {option.choices.map((choice: CustomizationOptionChoice) => {
                           const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
                           return (
