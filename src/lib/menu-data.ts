@@ -3,6 +3,12 @@ import type { MenuItemType } from './types';
 
 const extraPizzaToppings = [
   {
+    name: 'Сырный бортик',
+    priceModifier: 179,
+    imageUrl:
+      'https://cdn.dodostatic.net/static/Img/Ingredients/99f5cb91225b4875bd06a26d2e842106.png',
+  },
+  {
     name: 'Сливочная моцарелла',
     priceModifier: 79,
     imageUrl:
@@ -86,11 +92,7 @@ const extraPizzaToppings = [
     imageUrl:
       'https://cdn.dodostatic.net/static/Img/Ingredients/b2f3a5d5afe44516a93cfc0d2ee60088.png',
   },
-].map(topping => ({
-  name: topping.name,
-  priceModifier: topping.price,
-  imageUrl: topping.imageUrl,
-}));
+];
 
 
 export const menuData: MenuItemType[] = [
