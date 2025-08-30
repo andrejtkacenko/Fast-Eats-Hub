@@ -121,7 +121,7 @@ export default function ItemPage({ params }: ItemPageProps) {
             <div className="space-y-6 mb-8">
               {item.customizationOptions.map((option) => (
                 <div key={option.id}>
-                  {option.id !== 'toppings' && <h3 className="text-lg font-semibold mb-3">{option.name}</h3>}
+                  {option.id !== 'size' && option.id !== 'crust' && <h3 className="text-lg font-semibold mb-3">{option.name}</h3>}
                   {option.type === 'single' ? (
                     <div className="flex flex-wrap gap-2">
                       {option.choices.map((choice) => (
