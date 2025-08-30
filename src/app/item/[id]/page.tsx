@@ -138,7 +138,6 @@ export default function ItemPage({ params }: ItemPageProps) {
                     </div>
                   ) : (
                     <div>
-                      <h3 className="text-lg font-semibold mb-3">{option.name}</h3>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         {option.choices.map((choice) => {
                           const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
