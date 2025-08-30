@@ -121,7 +121,7 @@ export default function ItemPage({ params }: ItemPageProps) {
             <div className="space-y-6 mb-8">
               {item.customizationOptions.map((option) => (
                 <div key={option.id}>
-                  <h3 className="text-lg font-semibold mb-3">{option.name}</h3>
+                  {option.id !== 'toppings' && <h3 className="text-lg font-semibold mb-3">{option.name}</h3>}
                   {option.type === 'single' ? (
                     <div className="flex flex-wrap gap-2">
                       {option.choices.map((choice) => (
@@ -137,42 +137,45 @@ export default function ItemPage({ params }: ItemPageProps) {
                       ))}
                     </div>
                   ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {option.choices.map((choice) => {
-                        const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
-                        return (
-                          <Card 
-                            key={choice.name} 
-                            className={cn(
-                                "cursor-pointer transition-all",
-                                isSelected ? "ring-2 ring-primary" : "ring-0"
-                            )}
-                            onClick={() => handleMultipleChange(option.id, choice.name, !isSelected)}
-                          >
-                            <CardContent className="p-2 text-center flex flex-col h-full">
-                              {choice.imageUrl && (
-                                <div className="relative w-full aspect-square mb-2">
-                                  <Image src={choice.imageUrl} alt={choice.name} fill className="object-contain" sizes="10vw"/>
-                                </div>
+                    <div>
+                      <h3 className="text-lg font-semibold mb-3">{option.name}</h3>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        {option.choices.map((choice) => {
+                          const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
+                          return (
+                            <Card 
+                              key={choice.name} 
+                              className={cn(
+                                  "cursor-pointer transition-all",
+                                  isSelected ? "ring-2 ring-primary" : "ring-0"
                               )}
-                              <div className="flex-grow flex flex-col justify-center">
-                                <Label htmlFor={`${option.id}-${choice.name}`} className="text-sm font-medium leading-tight">
-                                  {choice.name}
-                                </Label>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  +${choice.priceModifier.toFixed(2)}
-                                </p>
-                              </div>
-                              <Checkbox 
-                                id={`${option.id}-${choice.name}`} 
-                                checked={isSelected}
-                                onCheckedChange={(checked) => handleMultipleChange(option.id, choice.name, !!checked)}
-                                className="sr-only"
-                              />
-                            </CardContent>
-                          </Card>
-                        )
-                      })}
+                              onClick={() => handleMultipleChange(option.id, choice.name, !isSelected)}
+                            >
+                              <CardContent className="p-2 text-center flex flex-col h-full">
+                                {choice.imageUrl && (
+                                  <div className="relative w-full aspect-square mb-2">
+                                    <Image src={choice.imageUrl} alt={choice.name} fill className="object-contain" sizes="10vw"/>
+                                  </div>
+                                )}
+                                <div className="flex-grow flex flex-col justify-center">
+                                  <Label htmlFor={`${option.id}-${choice.name}`} className="text-sm font-medium leading-tight">
+                                    {choice.name}
+                                  </Label>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    +${choice.priceModifier.toFixed(2)}
+                                  </p>
+                                </div>
+                                <Checkbox 
+                                  id={`${option.id}-${choice.name}`} 
+                                  checked={isSelected}
+                                  onCheckedChange={(checked) => handleMultipleChange(option.id, choice.name, !!checked)}
+                                  className="sr-only"
+                                />
+                              </CardContent>
+                            </Card>
+                          )
+                        })}
+                      </div>
                     </div>
                   )}
                 </div>

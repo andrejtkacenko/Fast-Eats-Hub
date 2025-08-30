@@ -176,6 +176,25 @@ export const menuData: MenuItemType[] = [
     category: 'Pizzas',
     customizationOptions: [
         {
+          id: 'size',
+          name: 'Size',
+          type: 'single',
+          choices: [
+            { name: 'Маленькая', priceModifier: 0 },
+            { name: 'Средняя', priceModifier: 2 },
+            { name: 'Большая', priceModifier: 4 },
+          ],
+        },
+        {
+          id: 'crust',
+          name: 'Crust',
+          type: 'single',
+          choices: [
+            { name: 'Традиционная', priceModifier: 0 },
+            { name: 'Тонкая', priceModifier: 0 },
+          ],
+        },
+        {
             id: 'toppings',
             name: 'Extra Toppings',
             type: 'multiple',
@@ -193,6 +212,25 @@ export const menuData: MenuItemType[] = [
     category: 'Pizzas',
     customizationOptions: [
      {
+        id: 'size',
+        name: 'Size',
+        type: 'single',
+        choices: [
+            { name: 'Маленькая', priceModifier: 0 },
+            { name: 'Средняя', priceModifier: 2 },
+            { name: 'Большая', priceModifier: 4 },
+        ],
+     },
+     {
+        id: 'crust',
+        name: 'Crust',
+        type: 'single',
+        choices: [
+            { name: 'Традиционная', priceModifier: 0 },
+            { name: 'Тонкая', priceModifier: 0 },
+        ],
+     },
+     {
         id: 'toppings',
         name: 'Extra Toppings',
         type: 'multiple',
@@ -209,6 +247,25 @@ export const menuData: MenuItemType[] = [
     'data-ai-hint': 'bbq pizza',
     category: 'Pizzas',
     customizationOptions: [
+     {
+        id: 'size',
+        name: 'Size',
+        type: 'single',
+        choices: [
+            { name: 'Маленькая', priceModifier: 0 },
+            { name: 'Средняя', priceModifier: 2 },
+            { name: 'Большая', priceModifier: 4 },
+        ],
+     },
+     {
+        id: 'crust',
+        name: 'Crust',
+        type: 'single',
+        choices: [
+            { name: 'Традиционная', priceModifier: 0 },
+            { name: 'Тонкая', priceModifier: 0 },
+        ],
+     },
      {
         id: 'toppings',
         name: 'Extra Toppings',
