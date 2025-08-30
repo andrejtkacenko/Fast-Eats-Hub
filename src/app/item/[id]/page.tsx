@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, use } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { menuData } from '@/lib/menu-data';
@@ -26,7 +26,8 @@ type SelectedOptions = {
 };
 
 export default function ItemPage({ params }: ItemPageProps) {
-  const item = menuData.find((i) => i.id === params.id);
+  const resolvedParams = use(Promise.resolve(params));
+  const item = menuData.find((i) => i.id === resolvedParams.id);
 
   const initialSelectedOptions = useMemo(() => {
     const initialOptions: SelectedOptions = {};
