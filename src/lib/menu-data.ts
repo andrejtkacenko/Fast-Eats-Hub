@@ -85,8 +85,9 @@ export const menuData: MenuItemType[] = [
             name: 'Size',
             type: 'single',
             choices: [
-                { name: 'Medium (12")', priceModifier: 0 },
-                { name: 'Large (16")', priceModifier: 4.00 },
+                { name: 'Маленькая (20 cm)', priceModifier: 0 },
+                { name: 'Средняя (30 cm)', priceModifier: 4.00 },
+                { name: 'Большая (40 cm)', priceModifier: 8.00 },
             ],
         },
         {
@@ -94,8 +95,8 @@ export const menuData: MenuItemType[] = [
             name: 'Crust',
             type: 'single',
             choices: [
-                { name: 'Classic', priceModifier: 0 },
-                { name: 'Cheese-stuffed', priceModifier: 2.50 },
+                { name: 'традиционная', priceModifier: 0 },
+                { name: 'тонкая', priceModifier: 0 },
             ],
         },
         {
@@ -119,24 +120,25 @@ export const menuData: MenuItemType[] = [
     'data-ai-hint': 'pepperoni pizza',
     category: 'Pizzas',
     customizationOptions: [
-        {
-            id: 'size',
-            name: 'Size',
-            type: 'single',
-            choices: [
-                { name: 'Medium (12")', priceModifier: 0 },
-                { name: 'Large (16")', priceModifier: 4.00 },
-            ],
-        },
-        {
-            id: 'crust',
-            name: 'Crust',
-            type: 'single',
-            choices: [
-                { name: 'Classic', priceModifier: 0 },
-                { name: 'Cheese-stuffed', priceModifier: 2.50 },
-            ],
-        },
+      {
+        id: 'size',
+        name: 'Size',
+        type: 'single',
+        choices: [
+            { name: 'Маленькая (20 cm)', priceModifier: 0 },
+            { name: 'Средняя (30 cm)', priceModifier: 4.00 },
+            { name: 'Большая (40 cm)', priceModifier: 8.00 },
+        ],
+    },
+    {
+        id: 'crust',
+        name: 'Crust',
+        type: 'single',
+        choices: [
+            { name: 'традиционная', priceModifier: 0 },
+            { name: 'тонкая', priceModifier: 0 },
+        ],
+    },
     ],
   },
   {
@@ -148,24 +150,25 @@ export const menuData: MenuItemType[] = [
     'data-ai-hint': 'bbq pizza',
     category: 'Pizzas',
     customizationOptions: [
-        {
-            id: 'size',
-            name: 'Size',
-            type: 'single',
-            choices: [
-                { name: 'Medium (12")', priceModifier: 0 },
-                { name: 'Large (16")', priceModifier: 4.00 },
-            ],
-        },
-        {
-            id: 'crust',
-            name: 'Crust',
-            type: 'single',
-            choices: [
-                { name: 'Classic', priceModifier: 0 },
-                { name: 'Cheese-stuffed', priceModifier: 2.50 },
-            ],
-        },
+      {
+        id: 'size',
+        name: 'Size',
+        type: 'single',
+        choices: [
+            { name: 'Маленькая (20 cm)', priceModifier: 0 },
+            { name: 'Средняя (30 cm)', priceModifier: 4.00 },
+            { name: 'Большая (40 cm)', priceModifier: 8.00 },
+        ],
+    },
+    {
+        id: 'crust',
+        name: 'Crust',
+        type: 'single',
+        choices: [
+            { name: 'традиционная', priceModifier: 0 },
+            { name: 'тонкая', priceModifier: 0 },
+        ],
+    },
     ],
   },
   {
