@@ -84,7 +84,7 @@ export function MenuDisplay() {
           <div 
             key={category.name} 
             id={category.name} 
-            className="scroll-mt-24"
+            className="scroll-mt-32"
             ref={el => categoryRefs.current[index] = el}
           >
             <h2 className="text-3xl font-bold font-headline mb-6 flex items-center gap-3">
