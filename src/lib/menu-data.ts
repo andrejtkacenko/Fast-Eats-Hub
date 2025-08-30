@@ -275,6 +275,114 @@ export const menuData: MenuItemType[] = [
     ],
   },
   {
+    id: '30',
+    name: 'Пепперони фреш',
+    description: 'Пикантная пепперони, увеличенная порция моцареллы, томаты, томатный соус.',
+    price: 15.99,
+    image: 'https://media.dodostatic.net/image/r:233x233/11EE7D61304FAF5A98A6958F2BB2D260.webp',
+    'data-ai-hint': 'pepperoni pizza',
+    category: 'Pizzas',
+    customizationOptions: [
+      {
+        id: 'size',
+        name: 'Size',
+        type: 'single',
+        choices: [
+          { name: 'Маленькая', priceModifier: 0 },
+          { name: 'Средняя', priceModifier: 2 },
+          { name: 'Большая', priceModifier: 4 },
+        ],
+      },
+      {
+        id: 'crust',
+        name: 'Crust',
+        type: 'single',
+        choices: [
+          { name: 'Традиционная', priceModifier: 0 },
+          { name: 'Тонкая', priceModifier: 0 },
+        ],
+      },
+      {
+          id: 'toppings',
+          name: 'Extra Toppings',
+          type: 'multiple',
+          choices: extraPizzaToppings
+      },
+    ],
+  },
+  {
+    id: '31',
+    name: 'Сырная',
+    description: 'Моцарелла, сыры чеддер и пармезан, соус альфредо.',
+    price: 13.99,
+    image: 'https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp',
+    'data-ai-hint': 'cheese pizza',
+    category: 'Pizzas',
+    customizationOptions: [
+      {
+        id: 'size',
+        name: 'Size',
+        type: 'single',
+        choices: [
+          { name: 'Маленькая', priceModifier: 0 },
+          { name: 'Средняя', priceModifier: 2 },
+          { name: 'Большая', priceModifier: 4 },
+        ],
+      },
+      {
+        id: 'crust',
+        name: 'Crust',
+        type: 'single',
+        choices: [
+          { name: 'Традиционная', priceModifier: 0 },
+          { name: 'Тонкая', priceModifier: 0 },
+        ],
+      },
+      {
+          id: 'toppings',
+          name: 'Extra Toppings',
+          type: 'multiple',
+          choices: extraPizzaToppings
+      },
+    ],
+  },
+  {
+    id: '32',
+    name: 'Чоризо фреш',
+    description: 'Острые колбаски чоризо, сладкий перец, моцарелла, томатный соус.',
+    price: 16.49,
+    image: 'https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp',
+    'data-ai-hint': 'chorizo pizza',
+    category: 'Pizzas',
+    customizationOptions: [
+      {
+        id: 'size',
+        name: 'Size',
+        type: 'single',
+        choices: [
+          { name: 'Маленькая', priceModifier: 0 },
+          { name: 'Средняя', priceModifier: 2 },
+          { name: 'Большая', priceModifier: 4 },
+        ],
+      },
+      {
+        id: 'crust',
+        name: 'Crust',
+        type: 'single',
+        choices: [
+          { name: 'Традиционная', priceModifier: 0 },
+          { name: 'Тонкая', priceModifier: 0 },
+        ],
+      },
+      {
+          id: 'toppings',
+          name: 'Extra Toppings',
+          type: 'multiple',
+          choices: extraPizzaToppings
+      },
+    ],
+  },
+  {
     id: '7',
     name: 'French Fries',
     description: 'Crispy, golden-brown fries salted to perfection. The perfect side for any meal.',
