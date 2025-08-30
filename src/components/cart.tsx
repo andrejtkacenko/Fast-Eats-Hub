@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AiRecommendations } from "@/components/ai-recommendations";
 
 export function Cart() {
   const { cartItems, updateQuantity, removeFromCart, cartTotal, clearCart } = useCart();
@@ -68,9 +67,6 @@ export function Cart() {
                   </Button>
                 </div>
               ))}
-            </div>
-            <div className="px-6">
-                <AiRecommendations />
             </div>
           </ScrollArea>
           <Separator />
