@@ -13,6 +13,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { auth } from "@/lib/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -23,7 +25,7 @@ type LoginFormValues = z.infer<typeof formSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, loginWithGoogle } = useAuth();
+  const { loginWithGoogle } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,7 +40,16 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     setIsLoading(true);
     try {
-      await login(data.email, data.password);
+      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+      if (!userCredential.user.emailVerified) {
+        toast({
+          title: "Email not verified",
+          description: "Please verify your email before logging in.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       toast({
         title: "Success",
         description: "You have successfully logged in.",

@@ -9,7 +9,8 @@ import {
   signOut,
   updateProfile,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  sendEmailVerification
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useToast } from './use-toast';
@@ -17,7 +18,7 @@ import { useToast } from './use-toast';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signup: (email: string, password: string, displayName: string) => Promise<void>;
+  signup: (email: string, password: string, displayName: string) => Promise<User | null>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   loginWithGoogle: () => Promise<void>;
@@ -41,8 +42,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signup = async (email: string, password: string, displayName: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName });
+    await sendEmailVerification(userCredential.user);
     // Manually update the user state because onAuthStateChanged might be slow
     setUser({ ...userCredential.user, displayName }); 
+    return userCredential.user;
   };
 
   const login = async (email: string, password: string) => {
