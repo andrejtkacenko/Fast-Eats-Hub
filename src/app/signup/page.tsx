@@ -55,9 +55,12 @@ export default function SignupPage() {
       const user = await signup(data.email, data.password, data.name);
       
       if (user) {
-        const recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-            'size': 'invisible',
-        });
+        if (!(window as any).recaptchaVerifier) {
+          (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+              'size': 'invisible',
+          });
+        }
+        const recaptchaVerifier = (window as any).recaptchaVerifier;
         
         const session = await multiFactor(user).getSession();
         const phoneInfoOptions = {

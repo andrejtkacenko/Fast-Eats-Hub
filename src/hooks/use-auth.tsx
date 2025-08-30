@@ -52,6 +52,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName });
     await sendEmailVerification(userCredential.user);
+    toast({
+      title: "Verification Email Sent",
+      description: "Please check your inbox to verify your email address.",
+    });
     // Manually update the user state because onAuthStateChanged might be slow
     setUser({ ...userCredential.user, displayName }); 
     return userCredential.user;
