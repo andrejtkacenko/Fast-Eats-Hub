@@ -1,11 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MenuItemCard } from "@/components/menu-item-card";
 import { menuData } from "@/lib/menu-data";
-import { Ham, Pizza, GlassWater, CakeSlice } from 'lucide-react';
+import { Ham, Pizza, GlassWater, CakeSlice, Coffee, Sandwich } from 'lucide-react';
 
 const categories = [
   { name: 'Burgers', icon: Ham },
   { name: 'Pizzas', icon: Pizza },
+  { name: 'Breakfast', icon: Coffee },
+  { name: 'Snacks', icon: Sandwich },
   { name: 'Sides', icon: CakeSlice },
   { name: 'Drinks', icon: GlassWater },
 ];
@@ -13,7 +15,7 @@ const categories = [
 export function MenuDisplay() {
   return (
     <Tabs defaultValue="Burgers" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+      <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 h-auto">
         {categories.map((category) => (
           <TabsTrigger key={category.name} value={category.name} className="py-2 gap-2">
             <category.icon className="h-5 w-5"/>

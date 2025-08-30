@@ -17,7 +17,7 @@ export type MenuItemType = {
   description: string;
   price: number;
   image: string;
-  category: 'Burgers' | 'Pizzas' | 'Sides' | 'Drinks';
+  category: 'Burgers' | 'Pizzas' | 'Sides' | 'Drinks' | 'Breakfast' | 'Snacks' | 'Coffee';
   'data-ai-hint'?: string;
   customizationOptions?: CustomizationOption[];
 };
