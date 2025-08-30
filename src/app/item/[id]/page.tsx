@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 
 interface ItemPageProps {
@@ -27,7 +28,17 @@ type SelectedOptions = {
 export default function ItemPage({ params }: ItemPageProps) {
   const { id } = use(params);
   const item = menuData.find((i) => i.id === id);
-  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
+  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(() => {
+    const initialOptions: SelectedOptions = {};
+    if (item?.customizationOptions) {
+      item.customizationOptions.forEach(option => {
+        if (option.type === 'single' && option.choices.length > 0) {
+          initialOptions[option.id] = option.choices[0].name;
+        }
+      });
+    }
+    return initialOptions;
+  });
   
   if (!item) {
     notFound();
@@ -83,7 +94,7 @@ export default function ItemPage({ params }: ItemPageProps) {
       if (Array.isArray(value)) {
         return value.map(choice => ({ option: option.name, choice }));
       }
-      return { option: option.name, choice: value };
+      return { option: option.name, choice: value as string };
     })
   }
 
@@ -112,20 +123,19 @@ export default function ItemPage({ params }: ItemPageProps) {
                 <div key={option.id} className="border-t pt-4">
                   <h3 className="text-lg font-semibold mb-2">{option.name}</h3>
                   {option.type === 'single' ? (
-                    <RadioGroup 
-                      onValueChange={(value) => handleSingleChange(option.id, value)}
-                      defaultValue={option.choices[0]?.name}
-                    >
+                    <div className="flex flex-wrap gap-2">
                       {option.choices.map((choice) => (
-                        <div key={choice.name} className="flex items-center space-x-2">
-                          <RadioGroupItem value={choice.name} id={`${option.id}-${choice.name}`} />
-                          <Label htmlFor={`${option.id}-${choice.name}`} className="flex-grow">
+                        <Button
+                            key={choice.name}
+                            variant={selectedOptions[option.id] === choice.name ? 'default' : 'outline'}
+                            onClick={() => handleSingleChange(option.id, choice.name)}
+                            className="flex-grow sm:flex-grow-0"
+                        >
                             {choice.name} 
                             {choice.priceModifier > 0 && ` (+$${choice.priceModifier.toFixed(2)})`}
-                          </Label>
-                        </div>
+                        </Button>
                       ))}
-                    </RadioGroup>
+                    </div>
                   ) : (
                     <div className="grid grid-cols-3 gap-4">
                       {option.choices.map((choice) => {
