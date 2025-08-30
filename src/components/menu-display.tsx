@@ -40,7 +40,7 @@ export function MenuDisplay() {
           }
         });
       },
-      { rootMargin: '-40% 0px -60% 0px', threshold: 0.1 } // Adjust rootMargin to trigger when section is in the middle of the viewport
+      { rootMargin: '-40% 0px -40% 0px', threshold: 0.1 } // Adjust rootMargin to trigger when section is in the middle of the viewport
     );
 
     const currentRefs = categoryRefs.current;
