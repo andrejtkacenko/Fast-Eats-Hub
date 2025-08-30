@@ -1,7 +1,8 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MenuItemCard } from "@/components/menu-item-card";
 import { menuData } from "@/lib/menu-data";
 import { Ham, Pizza, GlassWater, CakeSlice, Coffee, Sandwich } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const categories = [
   { name: 'Burgers', icon: Ham },
@@ -14,26 +15,37 @@ const categories = [
 
 export function MenuDisplay() {
   return (
-    <Tabs defaultValue="Burgers" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 h-auto">
-        {categories.map((category) => (
-          <TabsTrigger key={category.name} value={category.name} className="py-2 gap-2">
-            <category.icon className="h-5 w-5"/>
-            {category.name}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-      {categories.map((category) => (
-        <TabsContent key={category.name} value={category.name}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
-            {menuData
-              .filter((item) => item.category === category.name)
-              .map((item) => (
-                <MenuItemCard key={item.id} item={item} />
-              ))}
+    <div className="w-full">
+      <div className="sticky top-16 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-30 py-4 mb-6">
+          <div className="grid w-full grid-cols-2 md:grid-cols-6 h-auto gap-2">
+            {categories.map((category) => (
+              <Button key={category.name} asChild variant="ghost" className="py-2 gap-2 h-auto justify-start">
+                  <Link href={`#${category.name}`}>
+                    <category.icon className="h-5 w-5"/>
+                    {category.name}
+                  </Link>
+              </Button>
+            ))}
           </div>
-        </TabsContent>
-      ))}
-    </Tabs>
+      </div>
+      
+      <div className="space-y-12">
+        {categories.map((category) => (
+          <div key={category.name} id={category.name} className="scroll-mt-24">
+            <h2 className="text-3xl font-bold font-headline mb-6 flex items-center gap-3">
+                <category.icon className="h-8 w-8 text-primary"/>
+                {category.name}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {menuData
+                .filter((item) => item.category === category.name)
+                .map((item) => (
+                  <MenuItemCard key={item.id} item={item} />
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
