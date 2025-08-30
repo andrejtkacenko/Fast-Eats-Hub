@@ -1,6 +1,5 @@
 'use server';
 
-import { getRecommendations } from '@/ai/flows/ai-powered-recommendations';
 import { menuData } from '@/lib/menu-data';
 
 export async function getRecommendationsAction(cartItems: string[]) {
@@ -8,15 +7,9 @@ export async function getRecommendationsAction(cartItems: string[]) {
     return [];
   }
   
-  try {
-    const result = await getRecommendations({ cartItems });
-    const recommendedItems = result.recommendations.map(name => {
-      return menuData.find(item => item.name.toLowerCase() === name.toLowerCase());
-    }).filter(Boolean); // Filter out any undefined items
+  // This is a placeholder for a real recommendation engine.
+  // For now, it returns a few items from the menu that are not in the cart.
+  const recommendedItems = menuData.filter(item => !cartItems.find(cartItem => cartItem.toLowerCase() === item.name.toLowerCase()));
 
-    return recommendedItems;
-  } catch (error) {
-    console.error('Error fetching recommendations:', error);
-    return [];
-  }
+  return recommendedItems.slice(0, 2);
 }

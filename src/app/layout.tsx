@@ -5,7 +5,6 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/hooks/use-cart';
-import { SupportChat } from '@/components/support-chat';
 
 export const metadata: Metadata = {
   title: 'Fast Eats Hub',
@@ -34,7 +33,6 @@ export default function RootLayout({
                 <Header />
                 <main className="flex-1">{children}</main>
                 <Footer />
-                <SupportChat />
             </div>
             <Toaster />
         </CartProvider>
