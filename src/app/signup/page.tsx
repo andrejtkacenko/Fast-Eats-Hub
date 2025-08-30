@@ -79,12 +79,23 @@ export default function SignupPage() {
       }
 
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-      setIsLoading(false);
+        if (error.code === 'auth/unverified-email') {
+            // This case should be handled by the login logic now.
+            // But as a fallback, we can inform the user.
+             toast({
+              title: "Email not verified",
+              description: "Please verify your email before enabling MFA.",
+              variant: "destructive",
+            });
+        } else {
+            toast({
+                title: "Error",
+                description: error.message,
+                variant: "destructive",
+            });
+        }
+    } finally {
+        setIsLoading(false);
     }
   };
 
