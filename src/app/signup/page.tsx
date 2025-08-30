@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -13,11 +14,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { auth } from "@/lib/firebase";
+import { RecaptchaVerifier, multiFactor, PhoneAuthProvider, PhoneMultiFactorGenerator } from "firebase/auth";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, { message: "Please enter a valid E.164 phone number (e.g., +1234567890)." }),
 });
 
 type SignupFormValues = z.infer<typeof formSchema>;
@@ -27,6 +31,8 @@ export default function SignupPage() {
   const { signup, loginWithGoogle } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isEnrollingMfa, setIsEnrollingMfa] = useState(false);
+  const [verificationId, setVerificationId] = useState<string | null>(null);
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(formSchema),
@@ -34,28 +40,79 @@ export default function SignupPage() {
       name: "",
       email: "",
       password: "",
+      phone: "",
     },
   });
+
+  const mfaForm = useForm<{ code: string }>({
+    resolver: zodResolver(z.object({ code: z.string().length(6) })),
+  });
+
 
   const onSubmit: SubmitHandler<SignupFormValues> = async (data) => {
     setIsLoading(true);
     try {
-      await signup(data.email, data.password, data.name);
-      toast({
-        title: "Account Created",
-        description: "A verification email has been sent to your inbox. Please verify your email to login.",
-      });
-      router.push("/login");
+      const user = await signup(data.email, data.password, data.name);
+      
+      if (user) {
+        const recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+            'size': 'invisible',
+        });
+        
+        const session = await multiFactor(user).getSession();
+        const phoneInfoOptions = {
+            phoneNumber: data.phone,
+            session: session
+        };
+
+        const phoneAuthProvider = new PhoneAuthProvider(auth);
+        const newVerificationId = await phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
+        setVerificationId(newVerificationId);
+        setIsEnrollingMfa(true);
+        toast({
+            title: "Verification Code Sent",
+            description: "A code has been sent to your phone. Please enter it to enable MFA.",
+        });
+      }
+
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message,
         variant: "destructive",
       });
-    } finally {
       setIsLoading(false);
     }
   };
+
+  const onMfaSubmit: SubmitHandler<{code: string}> = async (data) => {
+    setIsLoading(true);
+    if (!verificationId) {
+        toast({ title: "Error", description: "Verification ID is missing.", variant: "destructive" });
+        setIsLoading(false);
+        return;
+    }
+
+    try {
+        const cred = PhoneAuthProvider.credential(verificationId, data.code);
+        const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+
+        if (auth.currentUser) {
+            await multiFactor(auth.currentUser).enroll(multiFactorAssertion, `My Phone`);
+            toast({
+                title: "MFA Enabled!",
+                description: "You have successfully enabled multi-factor authentication.",
+            });
+            router.push("/login");
+        } else {
+             toast({ title: "Error", description: "No user is signed in.", variant: "destructive" });
+        }
+    } catch (error: any) {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+    } finally {
+        setIsLoading(false);
+    }
+  }
   
   const handleGoogleLogin = async () => {
     try {
@@ -74,8 +131,45 @@ export default function SignupPage() {
     }
   };
 
+  if (isEnrollingMfa) {
+    return (
+        <div className="flex items-center justify-center py-12 px-4">
+            <Card className="w-full max-w-sm">
+                <CardHeader className="text-center">
+                    <CardTitle className="text-2xl font-headline">Enable MFA</CardTitle>
+                    <CardDescription>Enter the code sent to your phone.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Form {...mfaForm}>
+                        <form onSubmit={mfaForm.handleSubmit(onMfaSubmit)} className="space-y-4">
+                            <FormField
+                                control={mfaForm.control}
+                                name="code"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Verification Code</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="123456" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit" className="w-full" disabled={isLoading}>
+                                {isLoading ? "Enrolling..." : "Enable MFA"}
+                            </Button>
+                        </form>
+                    </Form>
+                </CardContent>
+            </Card>
+        </div>
+    );
+  }
+
+
   return (
     <div className="flex items-center justify-center py-12 px-4">
+      <div id="recaptcha-container"></div>
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
@@ -123,6 +217,19 @@ export default function SignupPage() {
                   </FormItem>
                 )}
               />
+               <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="+1234567890" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Creating account..." : "Create an account"}
               </Button>
@@ -152,3 +259,4 @@ export default function SignupPage() {
     </div>
   );
 }
+

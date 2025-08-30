@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -13,8 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { auth } from "@/lib/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { getMultiFactorResolver, PhoneAuthProvider } from "firebase/auth";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -25,7 +25,7 @@ type LoginFormValues = z.infer<typeof formSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const { loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, setMfaResolver } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,15 +40,7 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     setIsLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-      if (!userCredential.user.emailVerified) {
-        toast({
-          title: "Email not verified",
-          description: "Please verify your email before logging in.",
-          variant: "destructive",
-        });
-        return;
-      }
+      await login(data.email, data.password);
 
       toast({
         title: "Success",
@@ -56,11 +48,34 @@ export default function LoginPage() {
       });
       router.push("/");
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+        if (error.code === 'auth/multi-factor-required') {
+            const resolver = getMultiFactorResolver(error.auth, error);
+            setMfaResolver(resolver);
+            const phoneHint = resolver.hints[0].phoneNumber;
+            
+            const phoneAuthProvider = new PhoneAuthProvider(error.auth);
+            const recaptchaVerifier = (window as any).recaptchaVerifier;
+
+            await phoneAuthProvider.verifyPhoneNumber({
+                multiFactorHint: resolver.hints[0],
+                session: resolver.session
+            }, recaptchaVerifier);
+            
+            router.push(`/login/mfa?phoneHint=${phoneHint}`);
+        } else if (error.code === 'auth/email-not-verified') {
+             toast({
+              title: "Email not verified",
+              description: "Please verify your email before logging in.",
+              variant: "destructive",
+            });
+        }
+        else {
+            toast({
+                title: "Error",
+                description: error.message,
+                variant: "destructive",
+            });
+        }
     } finally {
       setIsLoading(false);
     }
@@ -85,6 +100,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center py-12 px-4">
+       <div id="recaptcha-container" className="fixed bottom-0 right-0"></div>
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-headline">Welcome Back!</CardTitle>
@@ -153,3 +169,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

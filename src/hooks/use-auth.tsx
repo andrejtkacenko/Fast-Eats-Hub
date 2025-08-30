@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -10,7 +11,11 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
-  sendEmailVerification
+  sendEmailVerification,
+  MultiFactorResolver,
+  PhoneAuthProvider,
+  PhoneMultiFactorGenerator,
+  RecaptchaVerifier
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useToast } from './use-toast';
@@ -18,10 +23,13 @@ import { useToast } from './use-toast';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  mfaResolver: MultiFactorResolver | null;
+  setMfaResolver: (resolver: MultiFactorResolver | null) => void;
   signup: (email: string, password: string, displayName: string) => Promise<User | null>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  completeMfaSignIn: (verificationCode: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,6 +37,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mfaResolver, setMfaResolver] = useState<MultiFactorResolver | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -36,6 +45,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(user);
       setLoading(false);
     });
+
+    if (typeof window !== 'undefined') {
+        (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+            'size': 'invisible',
+        });
+    }
+
     return () => unsubscribe();
   }, []);
 
@@ -49,7 +65,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    if (!userCredential.user.emailVerified) {
+        throw { code: 'auth/email-not-verified' };
+    }
   };
   
   const loginWithGoogle = async () => {
@@ -65,13 +84,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const completeMfaSignIn = async (verificationCode: string) => {
+    if (!mfaResolver) {
+        throw new Error("MFA resolver not available.");
+    }
+    const phoneAuthCredential = PhoneAuthProvider.credential(
+      mfaResolver.hints[0].verificationId!,
+      verificationCode
+    );
+    const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(phoneAuthCredential);
+    await mfaResolver.resolveSignIn(multiFactorAssertion);
+    setMfaResolver(null);
+  };
+
   const value = {
     user,
     loading,
+    mfaResolver,
+    setMfaResolver,
     signup,
     login,
     logout,
     loginWithGoogle,
+    completeMfaSignIn
   };
 
   return (
