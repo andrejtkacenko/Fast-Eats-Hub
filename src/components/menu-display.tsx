@@ -1,8 +1,13 @@
+
+"use client";
+
+import { useState, useEffect, useRef } from 'react';
 import { MenuItemCard } from "@/components/menu-item-card";
 import { menuData } from "@/lib/menu-data";
 import { Ham, Pizza, GlassWater, CakeSlice, Coffee, Sandwich } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { cn } from '@/lib/utils';
 
 const categories = [
   { name: 'Burgers', icon: Ham },
@@ -14,12 +19,57 @@ const categories = [
 ];
 
 export function MenuDisplay() {
+  const [activeCategory, setActiveCategory] = useState<string>('Burgers');
+  const categoryRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Find the entry that is most visible
+             const visibleEntries = entries.filter(e => e.isIntersecting);
+             if (visibleEntries.length > 0) {
+                const mostVisible = visibleEntries.reduce((prev, current) => {
+                    return (prev.intersectionRatio > current.intersectionRatio) ? prev : current
+                });
+                if (mostVisible.target.id) {
+                  setActiveCategory(mostVisible.target.id);
+                }
+             }
+          }
+        });
+      },
+      { rootMargin: '-40% 0px -60% 0px', threshold: 0.1 } // Adjust rootMargin to trigger when section is in the middle of the viewport
+    );
+
+    const currentRefs = categoryRefs.current;
+    currentRefs.forEach((ref) => {
+      if (ref) {
+        observer.observe(ref);
+      }
+    });
+
+    return () => {
+      currentRefs.forEach((ref) => {
+        if (ref) {
+          observer.unobserve(ref);
+        }
+      });
+    };
+  }, []);
+
   return (
     <div className="w-full">
       <div className="sticky top-16 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-30 py-4 mb-6">
           <div className="grid w-full grid-cols-2 md:grid-cols-6 h-auto gap-2">
             {categories.map((category) => (
-              <Button key={category.name} asChild variant="ghost" className="py-2 gap-2 h-auto justify-start">
+              <Button 
+                key={category.name} 
+                asChild 
+                variant={activeCategory === category.name ? 'default' : 'ghost'} 
+                className="py-2 gap-2 h-auto justify-start"
+              >
                   <Link href={`#${category.name}`}>
                     <category.icon className="h-5 w-5"/>
                     {category.name}
@@ -30,8 +80,13 @@ export function MenuDisplay() {
       </div>
       
       <div className="space-y-12">
-        {categories.map((category) => (
-          <div key={category.name} id={category.name} className="scroll-mt-24">
+        {categories.map((category, index) => (
+          <div 
+            key={category.name} 
+            id={category.name} 
+            className="scroll-mt-24"
+            ref={el => categoryRefs.current[index] = el}
+          >
             <h2 className="text-3xl font-bold font-headline mb-6 flex items-center gap-3">
                 <category.icon className="h-8 w-8 text-primary"/>
                 {category.name}
