@@ -109,18 +109,18 @@ export default function ItemPage({ params }: ItemPageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid md:grid-cols-2 gap-8 items-start">
-        <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-lg max-h-[50vh]">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-12 items-start">
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-lg md:col-span-3">
           <Image
             src={item.image}
             alt={item.name}
             fill
             className="object-cover"
             data-ai-hint={aiHint}
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 100vw, 60vw"
           />
         </div>
-        <div className="flex flex-col h-full max-h-[80vh]">
+        <div className="flex flex-col h-full max-h-[80vh] md:col-span-2">
           <h1 className="text-2xl md:text-3xl font-bold font-headline mb-2">{item.name}</h1>
           <p className="text-muted-foreground text-base mb-4">{item.description}</p>
           
@@ -196,3 +196,4 @@ export default function ItemPage({ params }: ItemPageProps) {
     </div>
   );
 }
+
