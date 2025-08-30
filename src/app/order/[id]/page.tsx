@@ -1,5 +1,7 @@
+
 import { OrderStatusTracker } from "@/components/order-status-tracker";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Container } from "@/components/container";
 
 interface OrderPageProps {
   params: {
@@ -9,7 +11,7 @@ interface OrderPageProps {
 
 export default function OrderPage({ params }: OrderPageProps) {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <Container className="py-12">
         <Card className="max-w-3xl mx-auto">
             <CardHeader className="text-center">
                 <CardTitle className="text-3xl font-bold font-headline">Thank you for your order!</CardTitle>
@@ -21,6 +23,6 @@ export default function OrderPage({ params }: OrderPageProps) {
                 <OrderStatusTracker />
             </CardContent>
         </Card>
-    </div>
+    </Container>
   );
 }
