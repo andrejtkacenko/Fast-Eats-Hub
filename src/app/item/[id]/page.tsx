@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, use } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { menuData } from '@/lib/menu-data';
@@ -25,7 +25,7 @@ type SelectedOptions = {
 };
 
 export default function ItemPage({ params }: ItemPageProps) {
-  const id = params.id;
+  const { id } = use(params);
   const item = menuData.find((i) => i.id === id);
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
   
