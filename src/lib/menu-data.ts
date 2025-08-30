@@ -1,5 +1,76 @@
 import type { MenuItemType } from './types';
 
+const extraPizzaToppings = [
+  {
+    name: 'Сливочная моцарелла',
+    price: 79,
+  },
+  {
+    name: 'Сыры чеддер и пармезан',
+    price: 79,
+  },
+  {
+    name: 'Острый перец халапеньо',
+    price: 59,
+  },
+  {
+    name: 'Нежный цыпленок',
+    price: 79,
+  },
+  {
+    name: 'Шампиньоны',
+    price: 59,
+  },
+  {
+    name: 'Ветчина',
+    price: 79,
+  },
+  {
+    name: 'Пикантная пепперони',
+    price: 79,
+  },
+  {
+    name: 'Острая чоризо',
+    price: 79,
+  },
+  {
+    name: 'Маринованные огурчики',
+    price: 59,
+  },
+  {
+    name: 'Свежие томаты',
+    price: 59,
+  },
+  {
+    name: 'Красный лук',
+    price: 59,
+  },
+  {
+    name: 'Сочные ананасы',
+    price: 59,
+  },
+  {
+    name: 'Итальянские травы',
+    price: 39,
+  },
+  {
+    name: 'Сладкий перец',
+    price: 59,
+  },
+  {
+    name: 'Кубики брынзы',
+    price: 79,
+  },
+  {
+    name: 'Митболы',
+    price: 79,
+  },
+].map(topping => ({
+  name: topping.name,
+  priceModifier: topping.price
+}));
+
+
 export const menuData: MenuItemType[] = [
   {
     id: '1',
@@ -97,17 +168,14 @@ export const menuData: MenuItemType[] = [
             choices: [
                 { name: 'традиционная', priceModifier: 0 },
                 { name: 'тонкая', priceModifier: 0 },
+                { name: 'Сырный бортик', priceModifier: 179 },
             ],
         },
         {
             id: 'toppings',
             name: 'Extra Toppings',
             type: 'multiple',
-            choices: [
-                { name: 'Mushrooms', priceModifier: 1.25 },
-                { name: 'Olives', priceModifier: 1.25 },
-                { name: 'Extra Basil', priceModifier: 1.00 },
-            ],
+            choices: extraPizzaToppings
         },
     ],
   },
@@ -137,7 +205,14 @@ export const menuData: MenuItemType[] = [
         choices: [
             { name: 'традиционная', priceModifier: 0 },
             { name: 'тонкая', priceModifier: 0 },
+            { name: 'Сырный бортик', priceModifier: 179 },
         ],
+    },
+     {
+        id: 'toppings',
+        name: 'Extra Toppings',
+        type: 'multiple',
+        choices: extraPizzaToppings
     },
     ],
   },
@@ -167,7 +242,14 @@ export const menuData: MenuItemType[] = [
         choices: [
             { name: 'традиционная', priceModifier: 0 },
             { name: 'тонкая', priceModifier: 0 },
+            { name: 'Сырный бортик', priceModifier: 179 },
         ],
+    },
+     {
+        id: 'toppings',
+        name: 'Extra Toppings',
+        type: 'multiple',
+        choices: extraPizzaToppings
     },
     ],
   },
