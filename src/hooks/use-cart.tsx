@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useContext, useState, useMemo } from 'react';
@@ -6,9 +7,9 @@ import { useToast } from "@/hooks/use-toast";
 
 interface CartContextType {
   cartItems: CartItemType[];
-  addToCart: (item: MenuItemType) => void;
+  addToCart: (item: Omit<CartItemType, 'quantity' | 'id'>) => void;
   removeFromCart: (itemId: string) => void;
-  updateQuantity: (itemId: string, quantity: number) => void;
+  updateQuantity: (itemId:string, quantity: number) => void;
   clearCart: () => void;
   cartTotal: number;
   cartCount: number;
@@ -16,21 +17,29 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+// Helper function to generate a unique ID for a cart item based on its customizations
+const generateCartId = (productId: string, customizations: { option: string; choice: string }[] = []) => {
+  const sortedCustomizations = customizations.slice().sort((a, b) => a.option.localeCompare(b.option) || a.choice.localeCompare(b.choice));
+  return `${productId}-${sortedCustomizations.map(c => `${c.option}:${c.choice}`).join('-')}`;
+};
+
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const { toast } = useToast();
 
-  const addToCart = (item: MenuItemType) => {
+  const addToCart = (item: Omit<CartItemType, 'quantity' | 'id'>) => {
+    const cartId = generateCartId(item.productId, item.customizations);
+    
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(cartItem => cartItem.id === item.id);
+      const existingItem = prevItems.find(cartItem => cartItem.id === cartId);
       if (existingItem) {
         return prevItems.map(cartItem =>
-          cartItem.id === item.id
+          cartItem.id === cartId
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        return [...prevItems, { id: item.id, name: item.name, price: item.price, image: item.image, quantity: 1 }];
+        return [...prevItems, { ...item, id: cartId, quantity: 1 }];
       }
     });
     toast({

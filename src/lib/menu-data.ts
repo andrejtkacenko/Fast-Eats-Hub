@@ -9,6 +9,26 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'cheeseburger classic',
     category: 'Burgers',
+    customizationOptions: [
+      {
+        id: 'extra-patty',
+        name: 'Add Extra Patty',
+        type: 'single',
+        choices: [
+          { name: 'No', priceModifier: 0 },
+          { name: 'Yes', priceModifier: 2.50 },
+        ],
+      },
+      {
+        id: 'extra-cheese',
+        name: 'Add Extra Cheese',
+        type: 'single',
+        choices: [
+          { name: 'No', priceModifier: 0 },
+          { name: 'Yes', priceModifier: 1.00 },
+        ],
+      },
+    ],
   },
   {
     id: '2',
@@ -18,6 +38,17 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'bacon burger',
     category: 'Burgers',
+    customizationOptions: [
+      {
+        id: 'extra-bacon',
+        name: 'Add Extra Bacon',
+        type: 'single',
+        choices: [
+          { name: 'No', priceModifier: 0 },
+          { name: 'Yes', priceModifier: 1.50 },
+        ],
+      },
+    ],
   },
   {
     id: '3',
@@ -27,6 +58,18 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'spicy burger',
     category: 'Burgers',
+     customizationOptions: [
+      {
+        id: 'heat-level',
+        name: 'Heat Level',
+        type: 'single',
+        choices: [
+          { name: 'Spicy (Standard)', priceModifier: 0 },
+          { name: 'Extra Spicy', priceModifier: 0.50 },
+          { name: 'Volcanic', priceModifier: 1.00 },
+        ],
+      },
+    ],
   },
   {
     id: '4',
@@ -36,6 +79,36 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'margherita pizza',
     category: 'Pizzas',
+    customizationOptions: [
+        {
+            id: 'size',
+            name: 'Size',
+            type: 'single',
+            choices: [
+                { name: 'Medium (12")', priceModifier: 0 },
+                { name: 'Large (16")', priceModifier: 4.00 },
+            ],
+        },
+        {
+            id: 'crust',
+            name: 'Crust',
+            type: 'single',
+            choices: [
+                { name: 'Classic', priceModifier: 0 },
+                { name: 'Cheese-stuffed', priceModifier: 2.50 },
+            ],
+        },
+        {
+            id: 'toppings',
+            name: 'Extra Toppings',
+            type: 'multiple',
+            choices: [
+                { name: 'Mushrooms', priceModifier: 1.25 },
+                { name: 'Olives', priceModifier: 1.25 },
+                { name: 'Extra Basil', priceModifier: 1.00 },
+            ],
+        },
+    ],
   },
   {
     id: '5',
@@ -45,6 +118,26 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'pepperoni pizza',
     category: 'Pizzas',
+    customizationOptions: [
+        {
+            id: 'size',
+            name: 'Size',
+            type: 'single',
+            choices: [
+                { name: 'Medium (12")', priceModifier: 0 },
+                { name: 'Large (16")', priceModifier: 4.00 },
+            ],
+        },
+        {
+            id: 'crust',
+            name: 'Crust',
+            type: 'single',
+            choices: [
+                { name: 'Classic', priceModifier: 0 },
+                { name: 'Cheese-stuffed', priceModifier: 2.50 },
+            ],
+        },
+    ],
   },
   {
     id: '6',
@@ -54,6 +147,26 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'bbq pizza',
     category: 'Pizzas',
+    customizationOptions: [
+        {
+            id: 'size',
+            name: 'Size',
+            type: 'single',
+            choices: [
+                { name: 'Medium (12")', priceModifier: 0 },
+                { name: 'Large (16")', priceModifier: 4.00 },
+            ],
+        },
+        {
+            id: 'crust',
+            name: 'Crust',
+            type: 'single',
+            choices: [
+                { name: 'Classic', priceModifier: 0 },
+                { name: 'Cheese-stuffed', priceModifier: 2.50 },
+            ],
+        },
+    ],
   },
   {
     id: '7',
@@ -63,6 +176,18 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'french fries',
     category: 'Sides',
+    customizationOptions: [
+        {
+            id: 'seasoning',
+            name: 'Seasoning',
+            type: 'single',
+            choices: [
+                { name: 'Regular Salt', priceModifier: 0 },
+                { name: 'Cajun Spice', priceModifier: 0.50 },
+                { name: 'Garlic Parmesan', priceModifier: 0.75 },
+            ],
+        },
+    ],
   },
   {
     id: '8',
@@ -90,6 +215,17 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'cola drink',
     category: 'Drinks',
+    customizationOptions: [
+        {
+            id: 'size',
+            name: 'Size',
+            type: 'single',
+            choices: [
+                { name: 'Can (12oz)', priceModifier: 0 },
+                { name: 'Bottle (20oz)', priceModifier: 0.80 },
+            ],
+        },
+    ],
   },
   {
     id: '11',
@@ -99,6 +235,17 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'lemonade drink',
     category: 'Drinks',
+    customizationOptions: [
+        {
+            id: 'size',
+            name: 'Size',
+            type: 'single',
+            choices: [
+                { name: 'Regular (16oz)', priceModifier: 0 },
+                { name: 'Large (24oz)', priceModifier: 1.00 },
+            ],
+        },
+    ],
   },
   {
     id: '12',
@@ -108,5 +255,16 @@ export const menuData: MenuItemType[] = [
     image: 'https://picsum.photos/600/400',
     'data-ai-hint': 'iced tea',
     category: 'Drinks',
+    customizationOptions: [
+        {
+            id: 'size',
+            name: 'Size',
+            type: 'single',
+            choices: [
+                { name: 'Regular (16oz)', priceModifier: 0 },
+                { name: 'Large (24oz)', priceModifier: 1.00 },
+            ],
+        },
+    ],
   },
 ];

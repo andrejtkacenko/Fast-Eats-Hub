@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -9,9 +10,10 @@ import { Button } from "@/components/ui/button";
 import { SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 
 export function Cart() {
-  const { cartItems, updateQuantity, removeFromCart, cartTotal, clearCart } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, cartTotal } = useCart();
 
   return (
     <>
@@ -24,8 +26,8 @@ export function Cart() {
           <ScrollArea className="flex-1">
             <div className="flex flex-col gap-6 p-6">
               {cartItems.map((item) => (
-                <div key={item.id} className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
+                <div key={item.id} className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-4">
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -33,9 +35,20 @@ export function Cart() {
                       height={80}
                       className="rounded-md object-cover"
                     />
-                    <div>
+                    <div className="flex-grow">
                       <h3 className="font-medium">{item.name}</h3>
-                      <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                       <div className="text-sm text-muted-foreground">
+                        <p>${item.price.toFixed(2)}</p>
+                        {item.customizations && item.customizations.length > 0 && (
+                            <div className="mt-1 flex flex-wrap gap-1">
+                                {item.customizations.map(cust => (
+                                    <Badge key={`${cust.option}-${cust.choice}`} variant="secondary" className="text-xs">
+                                        {cust.choice}
+                                    </Badge>
+                                ))}
+                            </div>
+                        )}
+                      </div>
                       <div className="mt-2 flex items-center gap-2">
                         <Button
                           variant="outline"
@@ -60,7 +73,7 @@ export function Cart() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-muted-foreground"
+                    className="text-muted-foreground shrink-0"
                     onClick={() => removeFromCart(item.id)}
                   >
                     <Trash2 className="h-5 w-5" />

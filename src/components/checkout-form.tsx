@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -37,6 +40,7 @@ export function CheckoutForm() {
   const { toast } = useToast();
   const { clearCart } = useCart();
   const router = useRouter();
+  const { user } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,6 +53,12 @@ export function CheckoutForm() {
       "cvv": "",
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      form.setValue("name", user.displayName || "");
+    }
+  }, [user, form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
