@@ -21,7 +21,8 @@ type SelectedOptions = {
   [key: string]: string | string[];
 };
 
-export default function ItemPage({ params: { id } }: ItemPageProps) {
+export default function ItemPage({ params }: ItemPageProps) {
+  const { id } = params;
   const item = menuData.find((i) => i.id === id);
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
   
