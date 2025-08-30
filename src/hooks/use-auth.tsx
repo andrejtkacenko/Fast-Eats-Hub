@@ -15,7 +15,6 @@ import {
   MultiFactorResolver,
   PhoneAuthProvider,
   PhoneMultiFactorGenerator,
-  RecaptchaVerifier
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useToast } from './use-toast';
@@ -45,12 +44,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(user);
       setLoading(false);
     });
-
-    if (typeof window !== 'undefined') {
-        (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-            'size': 'invisible',
-        });
-    }
 
     return () => unsubscribe();
   }, []);
