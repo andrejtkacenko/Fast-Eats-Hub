@@ -21,41 +21,33 @@ const categories = [
 export function MenuDisplay() {
   const [activeCategory, setActiveCategory] = useState<string>('Burgers');
   const categoryRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Find the entry that is most visible
-             const visibleEntries = entries.filter(e => e.isIntersecting);
-             if (visibleEntries.length > 0) {
-                const mostVisible = visibleEntries.reduce((prev, current) => {
-                    return (prev.intersectionRatio > current.intersectionRatio) ? prev : current
-                });
-                if (mostVisible.target.id) {
-                  setActiveCategory(mostVisible.target.id);
-                }
-             }
-          }
-        });
+        const intersectingEntry = entries.find(entry => entry.isIntersecting);
+        if (intersectingEntry) {
+            setActiveCategory(intersectingEntry.target.id);
+        }
       },
-      { rootMargin: '-40% 0px -40% 0px', threshold: 0.1 } // Adjust rootMargin to trigger when section is in the middle of the viewport
+      { 
+        rootMargin: "-50% 0px -50% 0px",
+        threshold: 0,
+      }
     );
 
     const currentRefs = categoryRefs.current;
     currentRefs.forEach((ref) => {
       if (ref) {
-        observer.observe(ref);
+        observerRef.current?.observe(ref);
       }
     });
 
     return () => {
-      currentRefs.forEach((ref) => {
-        if (ref) {
-          observer.unobserve(ref);
-        }
-      });
+      observerRef.current?.disconnect();
     };
   }, []);
 
