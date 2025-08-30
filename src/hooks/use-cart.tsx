@@ -13,6 +13,9 @@ interface CartContextType {
   clearCart: () => void;
   cartTotal: number;
   cartCount: number;
+  pointsDiscount: number;
+  applyPointsDiscount: (points: number) => void;
+  removePointsDiscount: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -25,7 +28,16 @@ const generateCartId = (productId: string, customizations: { option: string; cho
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+  const [pointsDiscount, setPointsDiscount] = useState(0); // in points
   const { toast } = useToast();
+
+  const applyPointsDiscount = (points: number) => {
+    setPointsDiscount(points);
+  };
+  
+  const removePointsDiscount = () => {
+    setPointsDiscount(0);
+  }
 
   const addToCart = (item: Omit<CartItemType, 'quantity' | 'id'>) => {
     const cartId = generateCartId(item.productId, item.customizations);
@@ -66,6 +78,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    setPointsDiscount(0);
   }
 
   const cartTotal = useMemo(() => {
@@ -77,7 +90,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, [cartItems]);
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount, pointsDiscount, applyPointsDiscount, removePointsDiscount }}>
       {children}
     </CartContext.Provider>
   );

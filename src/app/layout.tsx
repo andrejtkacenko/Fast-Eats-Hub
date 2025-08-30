@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/hooks/use-cart';
 import { AuthProvider } from '@/hooks/use-auth';
 import { Inter } from 'next/font/google';
+import { PointsProvider } from '@/hooks/use-points';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -31,12 +32,14 @@ export default function RootLayout({
       >
         <AuthProvider>
           <CartProvider>
+            <PointsProvider>
               <div className="relative flex min-h-screen flex-col">
                   <Header />
                   <main className="flex-1">{children}</main>
                   <Footer />
               </div>
               <Toaster />
+            </PointsProvider>
           </CartProvider>
         </AuthProvider>
       </body>

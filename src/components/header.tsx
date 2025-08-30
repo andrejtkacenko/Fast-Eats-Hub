@@ -7,6 +7,7 @@ import {
   User,
   PanelLeft,
   LogOut,
+  Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
@@ -22,10 +23,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Cart } from "@/components/cart";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
+import { usePoints } from "@/hooks/use-points";
 
 export function Header() {
   const { cartCount } = useCart();
   const { user, logout } = useAuth();
+  const { points } = usePoints();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -128,6 +131,13 @@ export function Header() {
                     </p>
                   </div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                 <DropdownMenuItem disabled>
+                    <div className="flex items-center">
+                        <Award className="mr-2 h-4 w-4" />
+                        <span>{points} Points</span>
+                    </div>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
                   <LogOut className="mr-2 h-4 w-4" />

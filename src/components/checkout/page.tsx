@@ -9,7 +9,8 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
 export default function CheckoutPage() {
-    const { cartItems, cartTotal } = useCart();
+    const { cartItems, cartTotal, pointsDiscount } = useCart();
+    const finalTotal = cartTotal - (pointsDiscount * 0.1);
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -47,9 +48,20 @@ export default function CheckoutPage() {
                             </div>
                         ))}
                         <Separator />
+                        <div className="flex justify-between items-center font-semibold">
+                            <p>Subtotal</p>
+                            <p>${cartTotal.toFixed(2)}</p>
+                        </div>
+                        {pointsDiscount > 0 && (
+                             <div className="flex justify-between items-center font-semibold text-primary">
+                                <p>Points Discount ({pointsDiscount} pts)</p>
+                                <p>-${(pointsDiscount * 0.1).toFixed(2)}</p>
+                            </div>
+                        )}
+                        <Separator />
                         <div className="flex justify-between items-center font-bold text-lg">
                             <p>Total</p>
-                            <p>${cartTotal.toFixed(2)}</p>
+                            <p>${finalTotal.toFixed(2)}</p>
                         </div>
                         </div>
                     </CardContent>
