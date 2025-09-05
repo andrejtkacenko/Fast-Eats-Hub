@@ -7,7 +7,7 @@ import { Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
 
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
-import { SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { SheetHeader, SheetTitle, SheetFooter, SheetClose } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -88,11 +88,13 @@ export function Cart() {
               <span>Total:</span>
               <span>${cartTotal.toFixed(2)}</span>
             </div>
-            <Link href="/checkout" className="w-full">
-                <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                    Checkout
-                </Button>
-            </Link>
+            <SheetClose asChild>
+              <Link href="/checkout" className="w-full">
+                  <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                      Checkout
+                  </Button>
+              </Link>
+            </SheetClose>
           </SheetFooter>
         </>
       ) : (
