@@ -11,7 +11,7 @@ import {
   Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetTrigger, SheetContent, SheetClose } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,10 +32,48 @@ export function Header() {
   const { user, logout } = useAuth();
   const { points } = usePoints();
 
+  const navLinks = [
+    { href: "/", label: "Menu" },
+    { href: "#", label: "Track Order" },
+  ];
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Container className="flex h-16 items-center">
-        <div className="mr-4 hidden md:flex">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+            >
+              <PanelLeft className="h-5 w-5" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+            <nav className="flex flex-col gap-4">
+              <SheetClose asChild>
+                <Link href="/" className="flex items-center gap-2 mb-4">
+                  <UtensilsCrossed className="h-6 w-6 text-primary" />
+                  <span className="font-bold text-lg font-headline">Fast Eats Hub</span>
+                </Link>
+              </SheetClose>
+              {navLinks.map((link) => (
+                <SheetClose asChild key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="flex items-center gap-2 p-2 rounded-md hover:bg-muted"
+                  >
+                    {link.label}
+                  </Link>
+                </SheetClose>
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+        
+        <div className="hidden md:flex mr-4">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <UtensilsCrossed className="h-6 w-6 text-primary" />
             <span className="hidden font-bold sm:inline-block font-headline">
@@ -43,59 +81,18 @@ export function Header() {
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link
-              href="/"
-              className="transition-colors hover:text-foreground/80 text-foreground"
-            >
-              Menu
-            </Link>
-            <Link
-              href="/order/track"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              Track Order
-            </Link>
+             {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="transition-colors hover:text-foreground/80 text-foreground/80"
+                >
+                  {link.label}
+                </Link>
+              ))}
           </nav>
         </div>
-
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="mr-2 md:hidden"
-            >
-              <PanelLeft className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="pr-0">
-             <Link href="/" className="mr-6 flex items-center space-x-2 px-6">
-                <UtensilsCrossed className="h-6 w-6 text-primary" />
-                <span className="font-bold font-headline">
-                  Fast Eats Hub
-                </span>
-              </Link>
-              <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-                <div className="flex flex-col space-y-3">
-                   <Link
-                    href="/"
-                    className="text-foreground"
-                  >
-                    Menu
-                  </Link>
-                  <Link
-                    href="/order/track"
-                    className="text-foreground/60"
-                  >
-                    Track Order
-                  </Link>
-                </div>
-              </div>
-          </SheetContent>
-        </Sheet>
-
-
+        
         <div className="flex flex-1 items-center justify-end space-x-2">
           <Sheet>
             <SheetTrigger asChild>

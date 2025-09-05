@@ -94,7 +94,7 @@ export function ItemDetails({ item }: ItemDetailsProps) {
   const aiHint = item['data-ai-hint'] || 'food item';
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-12 items-start">
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12 items-start">
       <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-lg md:col-span-3">
         <Image
           src={item.image}
@@ -107,20 +107,20 @@ export function ItemDetails({ item }: ItemDetailsProps) {
       </div>
       <div className="flex flex-col h-full max-h-[80vh] md:col-span-2">
         <h1 className="text-2xl md:text-3xl font-bold font-headline mb-2">{item.name}</h1>
-        <p className="text-muted-foreground text-base mb-4">{item.description}</p>
+        <p className="text-muted-foreground text-sm md:text-base mb-4">{item.description}</p>
         
         <div className="space-y-4 mb-4 flex-grow min-h-0 flex flex-col">
           {item.customizationOptions && item.customizationOptions.map((option) => (
             <div key={option.id} className={cn(option.type === 'multiple' && 'flex-grow min-h-0 flex flex-col')}>
               {option.id !== 'size' && option.id !== 'crust' && <h3 className="text-md font-semibold mb-2">{option.name}</h3>}
               {option.type === 'single' ? (
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {option.choices.map((choice) => (
                     <Button
                       key={choice.name}
                       variant={selectedOptions[option.id] === choice.name ? 'default' : 'outline'}
                       onClick={() => handleSingleChange(option.id, choice.name)}
-                      className="flex-grow"
+                      className="flex-grow text-xs sm:text-sm"
                     >
                       {choice.name} 
                       {choice.priceModifier > 0 && ` (+$${choice.priceModifier.toFixed(2)})`}
@@ -129,7 +129,7 @@ export function ItemDetails({ item }: ItemDetailsProps) {
                 </div>
               ) : (
                 <ScrollArea className="p-1 flex-grow">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-1">
+                  <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 p-1">
                     {option.choices.map((choice: CustomizationOptionChoice) => {
                       const isSelected = !!(selectedOptions[option.id] as string[])?.includes(choice.name);
                       return (

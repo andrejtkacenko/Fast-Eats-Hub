@@ -39,11 +39,7 @@ export function MenuDisplay() {
     const categoriesWithItems = categories.filter(category => 
         filteredMenuData.some(item => item.category === category.name)
     );
-    // If search yields results, but they don't belong to any of the predefined categories
     if (categoriesWithItems.length === 0 && filteredMenuData.length > 0) {
-        // This is a fallback. We could create a "Search Results" virtual category.
-        // For now, let's just show the hardcoded categories to avoid a blank filter set.
-        // A better approach might be to disable/hide filters when search is active.
         return categories;
     }
     return categoriesWithItems;
@@ -76,7 +72,7 @@ export function MenuDisplay() {
     return () => {
       observerRef.current?.disconnect();
     };
-  }, [displayedCategories]); // Re-run when categories change due to search
+  }, [displayedCategories]);
 
   return (
     <div>
@@ -91,20 +87,22 @@ export function MenuDisplay() {
             />
           </div>
           {displayedCategories.length > 0 && (
-            <div className="grid w-full grid-cols-2 md:grid-cols-6 h-auto gap-2">
-              {displayedCategories.map((category) => (
-                <Button 
-                  key={category.name} 
-                  asChild 
-                  variant={activeCategory === category.name && !searchQuery ? 'default' : 'ghost'} 
-                  className="py-2 gap-2 h-auto justify-start"
-                >
-                    <Link href={`#${category.name}`}>
-                      <category.icon className="h-5 w-5"/>
-                      {category.name}
-                    </Link>
-                </Button>
-              ))}
+            <div className="overflow-x-auto pb-2 -mx-4 px-4">
+              <div className="flex space-x-2 w-max">
+                {displayedCategories.map((category) => (
+                  <Button 
+                    key={category.name} 
+                    asChild 
+                    variant={activeCategory === category.name && !searchQuery ? 'default' : 'ghost'} 
+                    className="py-2 gap-2 h-auto"
+                  >
+                      <Link href={`#${category.name}`}>
+                        <category.icon className="h-5 w-5"/>
+                        <span className="whitespace-nowrap">{category.name}</span>
+                      </Link>
+                  </Button>
+                ))}
+              </div>
             </div>
           )}
       </div>
@@ -123,11 +121,11 @@ export function MenuDisplay() {
                 className="scroll-mt-48"
                 ref={el => categoryRefs.current[index] = el}
               >
-                <h2 className="text-3xl font-bold font-headline mb-6 flex items-center gap-3">
-                    <category.icon className="h-8 w-8 text-primary"/>
+                <h2 className="text-2xl md:text-3xl font-bold font-headline mb-6 flex items-center gap-3">
+                    <category.icon className="h-7 w-7 md:h-8 md:w-8 text-primary"/>
                     {category.name}
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                   {itemsInCategory.map((item) => (
                       <MenuItemCard key={item.id} item={item} />
                     ))}

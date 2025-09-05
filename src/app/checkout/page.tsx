@@ -14,23 +14,28 @@ export default function CheckoutPage() {
     const finalTotal = cartTotal - (pointsDiscount * 0.1);
 
   return (
-    <Container className="py-12">
-        <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold font-headline">Checkout</h1>
-            <p className="text-muted-foreground mt-2">Complete your order by providing your details below.</p>
+    <Container className="py-8 md:py-12">
+        <div className="text-center mb-8 md:mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold font-headline">Checkout</h1>
+            <p className="text-muted-foreground mt-2 text-sm md:text-base">Complete your order by providing your details below.</p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            <div className="lg:order-last">
+                <CheckoutForm />
+            </div>
             <div>
                 <Card>
                     <CardHeader>
-                        <CardTitle className="font-headline">Order Summary</CardTitle>
+                        <CardTitle className="font-headline text-2xl">Order Summary</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
                         {cartItems.map(item => (
                             <div key={item.id} className="flex justify-between items-start">
                                 <div className="flex items-start gap-4">
-                                    <Image src={item.image} alt={item.name} width={64} height={64} className="rounded-md"/>
+                                    <div className="relative w-16 h-16 shrink-0">
+                                        <Image src={item.image} alt={item.name} fill className="rounded-md object-cover"/>
+                                    </div>
                                     <div>
                                         <p className="font-medium">{item.name}</p>
                                         <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
@@ -45,20 +50,22 @@ export default function CheckoutPage() {
                                         )}
                                     </div>
                                 </div>
-                                <p className="font-medium text-right">${(item.price * item.quantity).toFixed(2)}</p>
+                                <p className="font-medium text-right shrink-0 ml-4">${(item.price * item.quantity).toFixed(2)}</p>
                             </div>
                         ))}
                         <Separator />
-                        <div className="flex justify-between items-center font-semibold">
-                            <p>Subtotal</p>
-                            <p>${cartTotal.toFixed(2)}</p>
-                        </div>
-                        {pointsDiscount > 0 && (
-                             <div className="flex justify-between items-center font-semibold text-primary">
-                                <p>Points Discount ({pointsDiscount} pts)</p>
-                                <p>-${(pointsDiscount * 0.1).toFixed(2)}</p>
+                        <div className="space-y-2 text-sm">
+                            <div className="flex justify-between items-center font-semibold">
+                                <p>Subtotal</p>
+                                <p>${cartTotal.toFixed(2)}</p>
                             </div>
-                        )}
+                            {pointsDiscount > 0 && (
+                                <div className="flex justify-between items-center font-semibold text-primary">
+                                    <p>Points Discount ({pointsDiscount} pts)</p>
+                                    <p>-${(pointsDiscount * 0.1).toFixed(2)}</p>
+                                </div>
+                            )}
+                        </div>
                         <Separator />
                         <div className="flex justify-between items-center font-bold text-lg">
                             <p>Total</p>
@@ -67,9 +74,6 @@ export default function CheckoutPage() {
                         </div>
                     </CardContent>
                 </Card>
-            </div>
-            <div>
-                <CheckoutForm />
             </div>
         </div>
     </Container>
